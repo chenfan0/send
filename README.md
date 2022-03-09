@@ -19,7 +19,7 @@ $ npm install koa-send
 
 ## Options
 
- - `maxage` Browser cache max-age in milliseconds. (defaults to `0`).
+ - `maxage` Browser cache max-age in milliseconds. It can be set to an object or a number. (defaults to `0`).
  - `immutable` Tell the browser the resource is immutable and can be cached indefinitely. (defaults to `false`).
  - `hidden` Allow transfer of hidden files. (defaults to `false`).
  - [`root`](#root-path) Root directory to restrict file access.
@@ -29,6 +29,24 @@ $ npm install koa-send
  - `format` If not `false` (defaults to `true`), format the path to serve static file servers and not require a trailing slash for directories, so that you can do both `/directory` and `/directory/`.
  - [`setHeaders`](#setheaders) Function to set custom headers on response.
  - `extensions` Try to match extensions from passed array to search for file when no extension is sufficed in URL. First found is served. (defaults to `false`)
+### max age
+```js
+const koa = require("koa");
+const send = require("send");
+
+const app = new koa();
+
+app.use(async (ctx) => {
+  await send(ctx, ctx.path, {
+    maxage: {
+      html: 0, // the html file maxage
+      css: 1000, // the css file maxage
+      js: 2000,  // the js file maxage
+      default: 3000  // default maxage
+    }
+  });
+})
+```
 
 ### Root path
 
