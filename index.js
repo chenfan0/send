@@ -3,6 +3,7 @@
  */
 
  const fs = require('fs')
+ const zlib = require('zlib')
  const util = require('util')
  const debug = require('debug')('koa-send')
  const resolvePath = require('resolve-path')
@@ -57,7 +58,7 @@
    const trailingSlash = path[path.length - 1] === '/'
    path = path.substr(parse(path).root.length)
    const index = opts.index
-   let maxage = opts.maxage || opts.maxAge || 0
+   const maxage = opts.maxage || opts.maxAge || 0
    const immutable = opts.immutable || false
    const hidden = opts.hidden || false
    const format = opts.format !== false
@@ -70,7 +71,6 @@
    if (typeof maxage === 'number') {
      maxage = { default: maxage }
    }
- 
  
    if (setHeaders && typeof setHeaders !== 'function') {
      throw new TypeError('option setHeaders must be function')
@@ -90,6 +90,21 @@
    if (!hidden && isHidden(root, path)) return
  
    let encodingExt = ''
+ 
+   // if brotli === true && !(await exists(path + '.br')) compress the file
+   if (ctx.acceptsEncodings('br', 'identity') === 'br' && brotli && !(await exists(path + '.br'))) {
+     const br = zlib.createBrotliCompress()
+     const rs = fs.createReadStream(path)
+     const ws = fs.createWriteStream(path + '.br')
+     rs.pipe(br).pipe(ws)
+   }
+   if (ctx.acceptsEncodings('gzip', 'identity') === 'gzip' && gzip && !(await exists(path + '.gz'))) {
+     const gz = zlib.createBrotliCompress()
+     const rs = fs.createReadStream(path)
+     const ws = fs.createWriteStream(path + '.gz')
+     rs.pipe(gz).pipe(ws)
+   }
+   
    // serve brotli file when possible otherwise gzipped file when possible
    if (ctx.acceptsEncodings('br', 'identity') === 'br' && brotli && (await exists(path + '.br'))) {
      path = path + '.br'
@@ -101,7 +116,7 @@
      ctx.set('Content-Encoding', 'gzip')
      ctx.res.removeHeader('Content-Length')
      encodingExt = '.gz'
-   }
+   } 
  
    if (extensions && !/\./.exec(basename(path))) {
      const list = [].concat(extensions)
