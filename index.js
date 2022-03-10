@@ -58,7 +58,7 @@
    const trailingSlash = path[path.length - 1] === '/'
    path = path.substr(parse(path).root.length)
    const index = opts.index
-   const maxage = opts.maxage || opts.maxAge || 0
+   let maxage = opts.maxage || opts.maxAge || 0
    const immutable = opts.immutable || false
    const hidden = opts.hidden || false
    const format = opts.format !== false

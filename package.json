@@ -1,7 +1,7 @@
 {
   "name": "koa-sents",
   "description": "Transfer static files",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "index.js",
   "keywords": [
     "koa",
