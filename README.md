@@ -1,6 +1,6 @@
-# [**koa-send**](https://github.com/koajs/send)
+# [**koa-sents**](https://github.com/koajs/send)
 
->  Static file serving middleware.
+>  Static file serving middleware.Fork by koa-send
 
 [![NPM version][npm-image]][npm-url]
 [![Build status][travis-image]][travis-url]
@@ -13,9 +13,12 @@
 ## Installation
 
 ```js
-$ npm install koa-send
+$ npm install koa-sents
 ```
 
+## compare with koa-send
+- You can set the default maxage, or you can set the max-age of HTML files, CSS files, and JS files separately
+- When setting file compression, the system checks whether the compressed file is available. If not, a compressed file is generated and used.
 
 ## Options
 

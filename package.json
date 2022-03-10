@@ -1,13 +1,14 @@
 {
-  "name": "koa-send2",
+  "name": "koa-sents",
   "description": "Transfer static files",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "main": "index.js",
   "keywords": [
     "koa",
     "file",
     "static",
-    "sendfile"
+    "sendfile",
+    "koa-send"
   ],
   "repository": {
     "type": "git",
