@@ -87,27 +87,6 @@ async function send(ctx, path, opts = {}) {
   if (!(await exists(path))) {
     return;
   }
-  // if brotli === true && !(await exists(path + '.br')) compress the file
-  if (
-    ctx.acceptsEncodings("br", "identity") === "br" &&
-    brotli &&
-    !(await exists(path + ".br"))
-  ) {
-    console.log(1111);
-    const br = zlib.createBrotliCompress();
-    const rs = fs.createReadStream(path);
-    const ws = fs.createWriteStream(path + ".br");
-    rs.pipe(br).pipe(ws);
-  } else if (
-    ctx.acceptsEncodings("gzip", "identity") === "gzip" &&
-    gzip &&
-    !(await exists(path + ".gz"))
-  ) {
-    const gz = zlib.createGzip();
-    const rs = fs.createReadStream(path);
-    const ws = fs.createWriteStream(path + ".gz");
-    rs.pipe(gz).pipe(ws);
-  }
 
   // serve brotli file when possible otherwise gzipped file when possible
   if (
